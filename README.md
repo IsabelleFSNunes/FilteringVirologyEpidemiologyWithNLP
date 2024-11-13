@@ -11,13 +11,18 @@ Create automatic filtering considering Deep Learning and techniques of NLP, to f
 
 ## Methodology
 
-In this instance, the big task was partitioned in three tasks to create a semantic cascade of filtering approach.
+In this instance, the big task was partitioned in three tasks to create a semantic cascade of filtering approach. 
 
 Starting with the complete database, the relevant subgroup of papers was selected applying the semantic of Bidirectional Encoder Representations for Transformers (BERT), considering the cosine of similarity between the embedding created by [bert-base-uncased](https://huggingface.co/google-bert/bert-base-uncased) pre-trained model and the descriptors initialized manually with the content of keywords of the creation of database. 
 
 With the relevant papers filtering with the BERT model, the database decreased and passed to another stage. To apply classification of the database, the PCA was applied to summary the dimensions of vectorial space of embeddings. To continue the analysis and classification the Kmeans is considered to clusterizing the topics of embedding with more similarities. Emphasizing fours classes listed, ["text mining", "computer vision", "both", "other"]. To simplify, the label "both" was changed as a concatenation between the two first labels, "text mining and computer vision".
 
 Currently, the new attributes already inserted in the dataframe, the last aim is extract the central topic and technique include in each relevant paper. For that, the descriptor of techniques in deep learning is conectaded with entities created by function of NER pipeline.
+
+Figure 1 is a summary of process applied in this application, it represents the descriptions mentioned previously.
+
+![Figura](./graphical_abstract.png)
+<center>Figure 1: Stagins of papers filtering process.</center>
 
 ## Materials and Details
 Applying the methodology, the respective files was considered organized as shown in Table 1.
@@ -30,6 +35,7 @@ Applying the methodology, the respective files was considered organized as shown
 |**DB/** | Database used in this application - [README.md](./DB/README.md) |
 |**model/** | Model (just this case, that is a short model, it was shared in github) | 
 | **requirements.txt** | The requirements used to execution of this code.  |
+|**database_class.py** | Class for specific Pythorch approach, with virology paper dataframe. | 
 |**preprocessing_data.py** | Methods considering the preprocess of data, such as adjust the inputs, load db and models. | 
 | **processing_data.py** | Create the embedding data, initialize parameters, classify and extract methods. |
 |**utils.py**| Methods to save and export file.|
@@ -59,9 +65,34 @@ The execution just need the python 3.10 pre-installed:
 python main.py
 ```
 
-The code execution, applying trained stage only for classification linear layer in this machine was approximatelly **15 min**.
+The code execution, applying trained stage only for classification linear layer in this machine was approximatelly **15 min**. The example of terminal output is: 
 
+```sh
+Using device: cuda
+The weights of classification layer was initilized.
+Model exported to ONNX file sucessfully, path: ./model/bert_sequence_classification.onnx
+Silhouette Score: 0.3291153609752655
+Methods used was classified.
+The ./relevant_papers.csv saved sucessfully.
+Duration of execution: 16.8988 min
+
+
+--------------------------------------------
+Total of relevant papers (task 1): 8289
+--------------------------------------------
+Number of paper of computer vision: 1774
+Number of paper of text mining: 2725
+Number of paper of both: 2758
+Number of paper of other: 1032
+```
+
+The exported model onnx could be visualized with [NETRON](https://netron.app/), or another app to create a visual interaction with layers. 
 
 
 
 ## Conclusion
+
+With the execution of `main.py` code 
+<!-- Why do you think your approach will be more effective than keywords-based filtering? -->
+
+<!--  -->
