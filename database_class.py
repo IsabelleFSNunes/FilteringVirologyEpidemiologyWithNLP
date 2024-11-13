@@ -1,5 +1,5 @@
 import torch
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset
 
 class VirologyPapersDataset(Dataset):
     """
@@ -16,7 +16,7 @@ class VirologyPapersDataset(Dataset):
         self.max_length= max_length
 
     def __getitem__( self, index ):
-        text= str( self.data.text[index] )
+        text= str( self.data["Concat Text"].iloc[index] )
         text= " ".join( text.split() )
         inputs= self.tokenizer.encode_plus( text,
                                             None,
@@ -28,13 +28,10 @@ class VirologyPapersDataset(Dataset):
         ids= inputs['input_ids']
         mask= inputs['attention_mask']
         token_type_ids= inputs["token_type_ids"]
-        target= self.data.sentiment[index]         # TODO: Ajustar para o database TIB
 
-        return {'ids': torch.tensor(ids, dtype= torch.long),
-                'mask': torch.tensor(mask, dtype= torch.long),
-                'token_type_ids': torch.tensor(token_type_ids, dtype= torch.long),
-                'targets': torch.tensor(target, dtype= torch.long) }
+        return {'input_ids': torch.tensor(ids, dtype= torch.long),
+                'attention_mask': torch.tensor(mask, dtype= torch.long),
+                'token_type_ids': torch.tensor(token_type_ids, dtype= torch.long) }
 
     def __len__( self ):
         return self.length
-    
