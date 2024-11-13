@@ -110,9 +110,11 @@ With the execution of `main.py` code, some files will be generate:
 
 
 
-This approach considering the filtering and the classification of itens of database. As a autosupervisioned application, the database not has automatic labels to target elements, consequently the behaviours of semantic of context with the descriptors can be more effective to cluster meaning of phrases and the sector istead of the keyword-based that is a deterministic meaning approach. 
+This approach considers filtering and classification of database items. As a self-supervised application, the database does not have automatic labels for target elements, so semantic context behaviors with descriptors may be more effective for clustering sentence and sector meaning rather than the keyword-based approach, which is a deterministic meaning approach.
+
+The running example presented in the previous section improves filtering in manual analysis for individual studies. If the user needs articles to be classified as 'both', the user will focus on 180 studies instead of 11450 articles
+
+Task 3 focuses on extracting techniques applied to each article in the database. To create the list of methods, descriptors are considered, and are present in the final output, already classified in an individual file. However, articles without an abstract are more imprecise for verifying semantics and extracting the techniques applied to them.
 
 
-<!-- Why do you think your approach will be more effective than keywords-based filtering? -->
-
-<!--  -->
+Therefore, the detailed results presented in the terminal output consider the reduced amount of articles for users. The relevant articles are smaller than the input DB, in this case and execution, the model represented as 3 % of the total database. It also took into account, the Silhouette Score: 0.396 of clustering by kmeans presents the classes as separated as moderate groups, in other words, they are well defined and not spaced.
