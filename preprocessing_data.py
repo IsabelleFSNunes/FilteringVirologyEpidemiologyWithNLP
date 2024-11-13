@@ -12,15 +12,29 @@ from transformers import BertTokenizer, BertForSequenceClassification, AdamW
 from sklearn.model_selection import train_test_split
 
 
+def load_descriptors_json(filename):
+    ''' 
+        Load json file with descriptors that will be applied in this specific context
+    inputs: 
+        filename (str): The file name of input (json) database, considering the path. 
+    output: 
+        descriptors_json (dict): The dictionary with tags and relevant expressions or keywords of each tag. 
+    '''
+    # json with descriptors
+    with open(filename, 'r') as file:
+        descriptors_json = json.load(file)
+    
+    return descriptors_json
+    
+
 def load_virology_paper(filename):
     '''
-        Load the specific dataset of article attributes.         
-        inputs: 
-            filename (str): The file name of input database, considering the path. 
-
-        output: 
-            train_df (pandas.DataFrame): The preprocessed training dataset.
-            test_df (pandas.DataFrame): The preprocessed test dataset.
+        Load the specific dataset of article attributes.
+    inputs: 
+        filename (str): The file name of input database, considering the path. 
+    output: 
+        train_df (pandas.DataFrame): The preprocessed training dataset.
+        test_df (pandas.DataFrame): The preprocessed test dataset.
     '''
     # print("Inside load sentiment data")
     complete_df= pd.read_csv(filename, encoding='unicode_escape')
@@ -28,16 +42,17 @@ def load_virology_paper(filename):
     complete_df= complete_df.fillna('')
     complete_df_one_string_column = pd.DataFrame(complete_df[['Title', 'Authors', 'Citation','Abstract']].agg(''.join, axis=1), columns=['Concat Text'] )
 
+    complete_df_one_string_column.drop_duplicates()
     ## split database
     # 20%: test and 80%: train
-    train_df, test_df = train_test_split(complete_df_one_string_column, test_size= 0.2, random_state= 42)
+    # train_df, test_df = train_test_split(complete_df_one_string_column, test_size= 0.2, random_state= 42)
 
-    train_df.drop_duplicates()
-    test_df.drop_duplicates()
+    # train_df.drop_duplicates()
+    # test_df.drop_duplicates()
 
-    return train_df, test_df
+    return complete_df_one_string_column
 
-def create_data_loaders(train_df, test_df, max_length, batch_size):
+def create_data_loaders(train_df, max_length, batch_size):
     ''' 
         Create PyTorch data loaders for the classification of papers task, considering the BertTokenizer (bert-base-uncased).
 
@@ -57,10 +72,10 @@ def create_data_loaders(train_df, test_df, max_length, batch_size):
     train_dataset = VirologyPapersDataset(train_df, tokenizer, max_length)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
-    test_dataset = VirologyPapersDataset(test_df, tokenizer, max_length)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
+    # test_dataset = VirologyPapersDataset(test_df, tokenizer, max_length)
+    # test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 
-    return train_loader, test_loader
+    return train_loader
 
 
 def load_llm_model( current_device, n_labels=2 ):
@@ -117,18 +132,3 @@ def preprocess_text(text, flg_stemm=False, flg_lemm=True, lst_stopwords=None):
     ## back to string from list
     text = " ".join(lst_text)
     return text
-
-def load_descriptors_json(filename):
-    ''' 
-        Load json file with descriptors that will be applied in this specific context
-
-        inputs: 
-            filename (str): The file name of input (json) database, considering the path. 
-
-    '''
-    # json with descriptors
-    with open(filename, 'r') as file:
-        descriptors_json = json.load(file)
-    
-    return descriptors_json
-    

@@ -1,11 +1,15 @@
 """ Definition of libraries and packages""" 
 import preprocessing_data
 import processing_data
+import utils 
 
 import os
 
 import warnings
 warnings.filterwarnings('ignore')
+
+import logging
+logging.getLogger("transformers.modeling_utils").setLevel(logging.ERROR)
 
 import torch
 import json
@@ -50,8 +54,8 @@ def main():
 
 
     ## Database
-    train_df, test_df = preprocessing_data.load_virology_paper("./DB/input/collection_with_abstracts.csv")
-    train_loader, test_loader = preprocessing_data.create_data_loaders(train_df, test_df, MAX_LENGTH, TRAIN_BATCH_SIZE)
+    train_df = preprocessing_data.load_virology_paper("./DB/input/collection_with_abstracts.csv")
+    train_loader = preprocessing_data.create_data_loaders(train_df, MAX_LENGTH, TRAIN_BATCH_SIZE)
 
     descriptors_json = preprocessing_data.load_descriptors_json("./DB/input/descriptors.json")
 
@@ -74,7 +78,7 @@ def main():
             preds = torch.argmax(outputs.logits, dim=1)
     model.eval()
 
-    processing_data.save_onnx("./model/bert_sequence_classification.onnx", model, input_ids, attention_mask)
+    utils.save_onnx("./model/bert_sequence_classification.onnx", model, input_ids, attention_mask)
 
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
     descritor_embeddings = processing_data.get_embeddings_batch(descriptors_json['deep learning'], tokenizer, model, batch_size=16)
@@ -94,6 +98,7 @@ def main():
     relevant_papers['methods_used'] = processing_data.classify_semantic_methods(embeddings_relevant, relevant_papers)
     print("Methods used was classified.")
 
+
     ### Task 03: Verify the method used
     # -------------------------------------------------------
     relevant_papers['methods_name'] = processing_data.extract_method_names(relevant_papers['Concat Text'])
@@ -107,6 +112,5 @@ if __name__ == "__main__":
 
 
 end_time = time.time()
-
 execution_time = (end_time - start_time) / 60.0
 print(f"Duration of execution: {execution_time:.4f} min")
