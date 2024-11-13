@@ -3,11 +3,9 @@ from torch.utils.data import Dataset
 
 class VirologyPapersDataset(Dataset):
     """
-        TODO: TO COMPLETE THE DESCRIPTION
-        Class to create a object to Virology Paper
-        inputs: 
-
-        output: 
+        Class to create a object to Virology Paper.
+    inputs: 
+        Dataset (torch.utils.data.Dataset): The initial specif DataFrame for Virology and Epidemiology paper. 
     """
     def __init__( self, dataframe, tokenizer, max_length ):
         self.length= len( dataframe )
