@@ -46,12 +46,21 @@ Storage: 1TB SSD NVMe
 ```
 
 ### Execution
-The code execution, applying trained stage only for classification linear layer was approximatelly **15 min**.
+
+The packages used in this repository, such Pytorch, Pandas, Numpy, Onnx, are listed in the requirements file, and could be updated by the instruction on the terminal. 
 
 ```sh
 pip install -r requirements.txt 
 
 ```
+
+The execution just need the python 3.10 pre-installed:
+```
+python main.py
+```
+
+The code execution, applying trained stage only for classification linear layer in this machine was approximatelly **15 min**.
+
 
 
 
