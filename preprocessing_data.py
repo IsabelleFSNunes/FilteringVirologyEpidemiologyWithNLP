@@ -35,7 +35,6 @@ def load_virology_paper(filename):
     output: 
         complete_df (pandas.DataFrame): The preprocessed complete dataset updated to receive the strings concatenated.
     '''
-    # print("Inside load sentiment data")
     complete_df= pd.read_csv(filename, encoding='unicode_escape')
 
     complete_df= complete_df.fillna('')
