@@ -78,6 +78,7 @@ def main():
             preds = torch.argmax(outputs.logits, dim=1)
     model.eval()
 
+    os.makedirs('./modelteste', exist_ok=True)
     utils.save_onnx("./model/bert_sequence_classification.onnx", model, input_ids, attention_mask)
 
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
