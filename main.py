@@ -91,11 +91,11 @@ def main():
     relevant_papers = train_df[train_df['is_relevant']]
 
     embeddings_relevant = processing_data.get_embeddings_batch( list(relevant_papers["Concat Text"]) , tokenizer=tokenizer, model=model, batch_size=1)
-
+    
 
     ### Task 02: Classifying the clusters
     # -------------------------------------------------------   
-    relevant_papers['methods_used'] = processing_data.classify_semantic_methods(embeddings_relevant, relevant_papers)
+    relevant_papers['methods_used'] = processing_data.classify_semantic_methods(embeddings_relevant, relevant_papers, "./DB/output/figure_kmeans.png")
     print("Methods used was classified.")
 
 
@@ -103,9 +103,32 @@ def main():
     # -------------------------------------------------------
     relevant_papers['methods_name'] = processing_data.extract_method_names(relevant_papers['Concat Text'])
 
+    
+
     path_output = "./relevant_papers.csv"
     relevant_papers.to_csv(path_output)
     print(f"The {path_output} saved sucessfully.")
+
+
+    print('\n\n--------------------------------------------')
+    print(f'Total of relevant papers (task 1): {len(relevant_papers)}')
+    print('--------------------------------------------')
+
+    method_labels = {
+        "computer vision": "./DB/output/computer_vision.csv",
+        "text mining": "./DB/output/text_mining.csv",
+        "both": "./DB/output/both.csv",
+        "other": "./DB/output/other.csv"
+    }
+    for method, filename in method_labels.items():
+        filtered_papers = relevant_papers[relevant_papers['methods_used'] == method]
+        size_filtered = len(filtered_papers)
+
+        filtered_papers.drop(['Concat Text', 'is_relevant', 'cluster_label'], axis=1, inplace=True)
+        filtered_papers.to_csv(filename, index=False)
+        print(f'Number of paper of {method}: {size_filtered} \t\t path of file {filename}')
+        
+
 
 if __name__ == "__main__":
     main()
