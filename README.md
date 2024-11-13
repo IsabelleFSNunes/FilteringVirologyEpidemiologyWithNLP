@@ -8,9 +8,22 @@ This application concentrate to specific topics about the medicine and technolog
 
 Create automatic filtering considering Deep Learning and techniques of NLP, to filter a dataset with a screening papers with advanced filtering by keywords with logic operators, as a query.
 
-In this instance, the big task was partitioned in three tasks to create a semantic cascade of filtering approach.  
 
-## Content and others details  
+## Methodology
+
+In this instance, the big task was partitioned in three tasks to create a semantic cascade of filtering approach.
+
+Starting with the complete database, the relevant subgroup of papers was selected applying the semantic of Bidirectional Encoder Representations for Transformers (BERT), considering the cosine of similarity between the embedding created by [bert-base-uncased](https://huggingface.co/google-bert/bert-base-uncased) pre-trained model and the descriptors initialized manually with the content of keywords of the creation of database. 
+
+With the relevant papers filtering with the BERT model, the database decreased and passed to another stage. To apply classification of the database, the PCA was applied to summary the dimensions of vectorial space of embeddings. To continue the analysis and classification the Kmeans is considered to clusterizing the topics of embedding with more similarities. Emphasizing fours classes listed, ["text mining", "computer vision", "both", "other"]. To simplify, the label "both" was changed as a concatenation between the two first labels, "text mining and computer vision".
+
+Currently, the new attributes already inserted in the dataframe, the last aim is extract the central topic and technique include in each relevant paper. For that, the descriptor of techniques in deep learning is conectaded with entities created by function of NER pipeline.
+
+## Materials and Details
+Applying the methodology, the respective files was considered organized as shown in Table 1.
+
+
+<center>Table 1: Contents of repository and descriptions.</center>
 
 | Directory/File | Description |
 | ---| ---| 
@@ -22,7 +35,8 @@ In this instance, the big task was partitioned in three tasks to create a semant
 |**utils.py**| Methods to save and export file.|
 |**main.py** | Execution of code | 
 
-### Execution 
+
+### Environment
 The code was created and executed in a conda environment. The hardware applied has the specs: 
 ```
 Processor: i9-13900H
@@ -30,6 +44,8 @@ Graphical Card: RTX 4070
 RAM Memory: 32 GB
 Storage: 1TB SSD NVMe
 ```
+
+### Execution
 The code execution, applying trained stage only for classification linear layer was approximatelly **15 min**.
 
 ```sh
@@ -37,3 +53,6 @@ pip install -r requirements.txt
 
 ```
 
+
+
+## Conclusion
