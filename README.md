@@ -33,7 +33,7 @@ Applying the methodology, the respective files was considered organized as shown
 | Directory/File | Description |
 | ---| ---| 
 |**DB/** | Database used in this application - [README.md](./DB/README.md) |
-|**model/** | Model (just this case, that is a short model, it was shared in github) | 
+|**model/** | Model [(the model created in the last execution is available in this link.)](https://1drv.ms/u/c/154b94a1d2543dda/EXQQ7n8ADZ9Lj-H76dFhY6cBCLomKjJ4luA86t2q1Zmm7g?e=UwhCoF) | 
 | **requirements.txt** | The requirements used to execution of this code.  |
 |**database_class.py** | Class for specific Pythorch approach, with virology paper dataframe. | 
 |**preprocessing_data.py** | Methods considering the preprocess of data, such as adjust the inputs, load db and models. | 
