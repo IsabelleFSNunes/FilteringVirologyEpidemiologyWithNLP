@@ -105,29 +105,44 @@ def main():
 
     
 
-    path_output = "./relevant_papers.csv"
+    path_output = "./DB/output/relevant_papers.csv"
     relevant_papers.to_csv(path_output)
     print(f"The {path_output} saved sucessfully.")
+    
+    relevant_papers.loc[relevant_papers['methods_used'] == 'computer vision and text mining', 'methods_used'] = 'both'
 
-
-    print('\n\n--------------------------------------------')
+    print('---------------------------------------------------------------------------------------------')
     print(f'Total of relevant papers (task 1): {len(relevant_papers)}')
-    print('--------------------------------------------')
-
+    print('---------------------------------------------------------------------------------------------')
+    # Lista dos métodos e nomes dos arquivos CSV para salvar cada subset
     method_labels = {
         "computer vision": "./DB/output/computer_vision.csv",
         "text mining": "./DB/output/text_mining.csv",
         "both": "./DB/output/both.csv",
         "other": "./DB/output/other.csv"
     }
+    size_filtered = []
     for method, filename in method_labels.items():
         filtered_papers = relevant_papers[relevant_papers['methods_used'] == method]
-        size_filtered = len(filtered_papers)
+        size_filtered.append(len(filtered_papers))
 
         filtered_papers.drop(['Concat Text', 'is_relevant', 'cluster_label'], axis=1, inplace=True)
         filtered_papers.to_csv(filename, index=False)
-        print(f'Number of paper of {method}: {size_filtered} \t\t path of file {filename}')
+        out_print = f'Number of paper of {method}: {len(filtered_papers)} \t Path of file {filename}'
+        print(out_print.center(90))
         
+    
+        
+    print('---------------------------------------------------------------------------------------------')
+    print(f'Summary statistics: ')
+    print('---------------------------------------------------------------------------------------------')
+    print(f'Total input: {len(train_df)} (100 %).')
+    relevant_percent = (100 * len(relevant_papers)/len(train_df))
+    print(f'Relevant to DL in Virology/Epidemiology: {len(relevant_papers)} ({relevant_percent:.2f} % of total). ')
+    print('---------------------------------------------------------------------------------------------')
+    for size, (method, filename) in zip(size_filtered,  method_labels.items()): 
+        out_print = f'Papers of {method}: {size} ({(relevant_percent * size/len(relevant_papers)):.2f} % of total) \t ({(100 * size/len(relevant_papers)):.2f} % of relevant papers) '
+        print(out_print.rjust(90))
 
 
 if __name__ == "__main__":
@@ -136,4 +151,4 @@ if __name__ == "__main__":
 
 end_time = time.time()
 execution_time = (end_time - start_time) / 60.0
-print(f"Duration of execution: {execution_time:.4f} min")
+print(f"Duration of execution: {execution_time:.2f} min")

@@ -17,7 +17,7 @@ Starting with the complete database, the relevant subgroup of papers was selecte
 
 With the relevant papers filtering with the BERT model, the database decreased and passed to another stage. To apply classification of the database, the PCA was applied to summary the dimensions of vectorial space of embeddings. To continue the analysis and classification the Kmeans is considered to clusterizing the topics of embedding with more similarities. Emphasizing fours classes listed, ["text mining", "computer vision", "both", "other"]. To simplify, the label "both" was changed as a concatenation between the two first labels, "text mining and computer vision".
 
-Currently, the new attributes already inserted in the dataframe, the last aim is extract the central topic and technique include in each relevant paper. For that, the descriptor of techniques in deep learning is conectaded with entities created by function of NER pipeline.
+Currently, the new attributes already inserted in the dataframe, the last aim is extract the central topic and technique include in each relevant paper. For that, the descriptor of techniques in deep learning is conectaded with entities created by function of NER pipeline of SpaCy package.
 
 Figure 1 is a summary of process applied in this application, it represents the descriptions mentioned previously.
 
@@ -46,8 +46,8 @@ Applying the methodology, the respective files was considered organized as shown
 The code was created and executed in a conda environment. The hardware applied has the specs: 
 ```
 Processor: i9-13900H
-Graphical Card: RTX 4070
-RAM Memory: 32 GB
+Graphical Card: NVIDIA GeForce RTX 4070
+RAM Memory: 32 GB DDR5
 Storage: 1TB SSD NVMe
 ```
 
@@ -65,34 +65,54 @@ The execution just need the python 3.10 pre-installed:
 python main.py
 ```
 
-The code execution, applying trained stage only for classification linear layer in this machine was approximatelly **15 min**. The example of terminal output is: 
+The code execution, applying trained stage only for classification linear layer in this machine was approximatelly **10 - 20min**. The example of terminal output is: 
 
 ```sh
 Using device: cuda
 The weights of classification layer was initilized.
 Model exported to ONNX file sucessfully, path: ./model/bert_sequence_classification.onnx
-Silhouette Score: 0.3291153609752655
+Silhouette Score: 0.39557167887687683
 Methods used was classified.
-The ./relevant_papers.csv saved sucessfully.
-Duration of execution: 16.8988 min
-
-
---------------------------------------------
-Total of relevant papers (task 1): 8289
---------------------------------------------
-Number of paper of computer vision: 1774
-Number of paper of text mining: 2725
-Number of paper of both: 2758
-Number of paper of other: 1032
+The ./DB/output/relevant_papers.csv saved sucessfully.
+---------------------------------------------------------------------------------------------
+Total of relevant papers (task 1): 344
+---------------------------------------------------------------------------------------------
+  Number of paper of computer vision: 90         Path of file ./DB/output/computer_vision.csv   
+      Number of paper of text mining: 18         Path of file ./DB/output/text_mining.csv
+             Number of paper of both: 180        Path of file ./DB/output/both.csv
+            Number of paper of other: 56         Path of file ./DB/output/other.csv
+---------------------------------------------------------------------------------------------
+Summary statistics:
+---------------------------------------------------------------------------------------------
+Total input: 11450 (100 %).
+Relevant to DL in Virology/Epidemiology: 344 (3.00 % of total).
+---------------------------------------------------------------------------------------------
+           Papers of computer vision: 90 (0.79 % of total)       (26.16 % of relevant papers)
+                Papers of text mining: 18 (0.16 % of total)      (5.23 % of relevant papers)
+                     Papers of both: 180 (1.57 % of total)       (52.33 % of relevant papers)
+                     Papers of other: 56 (0.49 % of total)       (16.28 % of relevant papers)
+Duration of execution: 9.27 min
 ```
 
-The exported model onnx could be visualized with [NETRON](https://netron.app/), or another app to create a visual interaction with layers. 
+The exported model onnx could be visualized with [NETRON](https://netron.app/), or another app to create a visual interaction with layers. Also can be applied in another application as a load model input, it extends the possibilities of to share as a product software.  
+
+With the execution of `main.py` code, some files will be generate: 
+- The task 1 will export the [model](./model/bert_embeddings_model.onnx)
+- The task 2 will generate a [figure](./DB/output/figure_kmeans.png) of kmeans plot of relevant papers, as shown in Figure 2. It represents the four possibilities of semantic labels recognized from embeddings and BERT model. 
+- The task 3 will create four csv files considering the methods used in each papers contents. 
 
 
+
+![Kmeans](./DB/output/figure_kmeans.png)
+<center>Figure 2: Kmeans of 4 clusters of relevant papers. </center>
 
 ## Conclusion
 
-With the execution of `main.py` code 
+
+
+This approach considering the filtering and the classification of itens of database. As a autosupervisioned application, the database not has automatic labels to target elements, consequently the behaviours of semantic of context with the descriptors can be more effective to cluster meaning of phrases and the sector istead of the keyword-based that is a deterministic meaning approach. 
+
+
 <!-- Why do you think your approach will be more effective than keywords-based filtering? -->
 
 <!--  -->
